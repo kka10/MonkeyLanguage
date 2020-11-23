@@ -1,0 +1,40 @@
+{
+   // Use IntelliSense to find out which attributes exist for C# debugging
+   // Use hover for the description of the existing attributes
+   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+   "version": "0.2.0",
+   "configurations": [
+    {
+        "type": "aws-sam",
+        "request": "direct-invoke",
+        "name": "MonkeyLanguage:LexingTest::Monkey.LexingTest.LexerTest::TestNextToken1 (dotnetcore3.1)",
+        "invokeTarget": {
+            "target": "code",
+            "projectRoot": "LexingTest",
+            "lambdaHandler": "LexingTest::Monkey.LexingTest.LexerTest::TestNextToken1"
+        },
+        "lambda": {
+            "runtime": "dotnetcore3.1",
+            "payload": {},
+            "environmentVariables": {}
+        }
+    },
+    {
+        "name": ".NET Core Launch (console)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/LexingTest/bin/Debug/net5.0/LexingTest.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/LexingTest",
+        "console": "internalConsole",
+        "stopAtEntry": false
+    },
+    {
+        "name": ".NET Core Attach",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:pickProcess}"
+    }
+]
+}

@@ -1,0 +1,12 @@
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.csprojAssemblyReference.cache
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.AssemblyInfoInputs.cache
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.AssemblyInfo.cs
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.csproj.CoreCompileInputs.cache
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\bin\Debug\net5.0\Lexing.deps.json
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\bin\Debug\net5.0\Lexing.dll
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\bin\Debug\net5.0\ref\Lexing.dll
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\bin\Debug\net5.0\Lexing.pdb
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.dll
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\ref\Lexing.dll
+C:\Users\kkato.DESKTOP-BGV45KC\ws\MonkeyLanguage\Lexing\obj\Debug\net5.0\Lexing.pdb
