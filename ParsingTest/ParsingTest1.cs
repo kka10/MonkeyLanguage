@@ -1,5 +1,6 @@
 using System;
 using Xunit;
+using Xunit.Abstractions;
 using Monkey.Parsing;
 using Monkey.Lexing;
 using Monkey.Ast;
@@ -9,6 +10,13 @@ namespace Monkey.ParsingTest
 {
     public class ParsingTest1
     {
+        private readonly ITestOutputHelper output;
+
+        public ParsingTest1(ITestOutputHelper output) 
+        {
+            this.output = output;
+        }
+
         [Fact]
         public void TestLetStatement1()
         {
@@ -22,6 +30,7 @@ namespace Monkey.ParsingTest
             var lexer = new Lexer(input);
             var parser = new Parser(lexer);
             var root = parser.ParseProgram();
+            this._CheckParserErrors(parser);
 
             Assert.Equal(root.Statements.Count, 3);
 
@@ -46,6 +55,13 @@ namespace Monkey.ParsingTest
             Assert.Equal(letStatement.Name.Value, name);
 
             Assert.Equal(letStatement.Name.TokenLiteral(), name);
+        }
+
+        private void _CheckParserErrors(Parser parser)
+        {
+            if (parser.Errors.Count == 0) return;
+            var message = "\n" + string.Join("\n", parser.Errors);
+            output.WriteLine(message);
         }
     }
 }

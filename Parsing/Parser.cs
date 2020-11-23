@@ -12,6 +12,7 @@ namespace Monkey.Parsing
         public Token CurrentToken { get; set; }
         public Token NextToken { get; set; }
         public Lexer Lexer { get; }
+        public List<string> Errors { get; set; } = new List<string>();
 
         public Parser(Lexer lexer)
         {
@@ -84,7 +85,14 @@ namespace Monkey.Parsing
                 return true;
             }
 
+            this.AddNextTokenError(type, this.NextToken.Type);
+
             return false;
+        }
+
+        private void AddNextTokenError(TokenType expected, TokenType actual)
+        {
+            this.Errors.Add($"{actual.ToString()} ではなく {expected.ToString()} が来なければなりません。");
         }
     }
 }
