@@ -53,6 +53,8 @@ namespace Monkey.Parsing
             {
                 case TokenType.LET:
                     return this.ParseLetStatement();
+                case TokenType.RETURN:
+                    return this.ParseReturnStatement();
                 default:
                     return null;
             }
@@ -68,6 +70,20 @@ namespace Monkey.Parsing
             statement.Name = new Identifier(this.CurrentToken, this.CurrentToken.Literal);
 
             if (!this.ExpectPeek(TokenType.ASSIGN)) return null;
+
+            while (this.CurrentToken.Type != TokenType.SEMICOLON)
+            {
+                this.ReadToken();
+            }
+
+            return statement;
+        }
+
+        public ReturnStatement ParseReturnStatement()
+        {
+            var statement = new ReturnStatement();
+            statement.Token = this.CurrentToken;
+            this.ReadToken();
 
             while (this.CurrentToken.Type != TokenType.SEMICOLON)
             {

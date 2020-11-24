@@ -12,7 +12,7 @@ namespace Monkey.ParsingTest
     {
         private readonly ITestOutputHelper output;
 
-        public ParsingTest1(ITestOutputHelper output) 
+        public ParsingTest1(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -55,6 +55,32 @@ namespace Monkey.ParsingTest
             Assert.Equal(letStatement.Name.Value, name);
 
             Assert.Equal(letStatement.Name.TokenLiteral(), name);
+        }
+
+        [Fact]
+        public void TestReturnStatement1()
+        {
+            var input =
+            @"
+            return 5;
+            return 10;
+            return 993322;
+            ";
+
+            var lexer = new Lexer(input);
+            var parser = new Parser(lexer);
+            var root = parser.ParseProgram();
+            this._CheckParserErrors(parser);
+
+            Assert.Equal(root.Statements.Count, 3);
+
+            foreach (var statement in root.Statements)
+            {
+                var returnStatement = statement as ReturnStatement;
+                Assert.NotNull(returnStatement);
+
+                Assert.Equal(returnStatement.TokenLiteral(), "return");
+            }
         }
 
         private void _CheckParserErrors(Parser parser)
