@@ -5,6 +5,7 @@ using Monkey.Parsing;
 using Monkey.Lexing;
 using Monkey.Ast;
 using Monkey.Ast.Statements;
+using Monkey.Ast.Expressions;
 
 namespace Monkey.ParsingTest
 {
@@ -81,6 +82,48 @@ namespace Monkey.ParsingTest
 
                 Assert.Equal(returnStatement.TokenLiteral(), "return");
             }
+        }
+
+        [Fact]
+        public void TestIdentifierExpression1()
+        {
+            var input = @"foobar;";
+
+            var lexer = new Lexer(input);
+            var parser = new Parser(lexer);
+            var root = parser.ParseProgram();
+            this._CheckParserErrors(parser);
+
+            Assert.Equal(root.Statements.Count, 1);
+
+            var statement = root.Statements[0] as ExpressionStatement;
+            Assert.NotNull(statement);
+
+            var ident = statement.Expression as Identifier;
+            Assert.NotNull(ident);
+            Assert.Equal(ident.Value, "foobar");
+            Assert.Equal(ident.TokenLiteral(), "foobar");
+        }
+
+        [Fact]
+        public void TestIntegerLiteralExpression1()
+        {
+            var input = @"123";
+
+            var lexer = new Lexer(input);
+            var parser = new Parser(lexer);
+            var root = parser.ParseProgram();
+            this._CheckParserErrors(parser);
+
+            Assert.Equal(root.Statements.Count, 1);
+
+            var statement = root.Statements[0] as ExpressionStatement;
+            Assert.NotNull(statement);
+
+            var integerLiteral = statement.Expression as IntegerLiteral;
+            Assert.NotNull(integerLiteral);
+            Assert.Equal(integerLiteral.Value, 123);
+            Assert.Equal(integerLiteral.TokenLiteral(), "123");
         }
 
         private void _CheckParserErrors(Parser parser)

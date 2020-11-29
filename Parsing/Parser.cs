@@ -7,6 +7,9 @@ using Monkey.Ast.Expressions;
 
 namespace Monkey.Parsing
 {
+    using PrefixParseFn = Func<IExpression>;
+    using InfixParseFn = Func<IExpression, IExpression>;
+    
     public class Parser
     {
         public Token CurrentToken { get; set; }
@@ -14,12 +17,17 @@ namespace Monkey.Parsing
         public Lexer Lexer { get; }
         public List<string> Errors { get; set; } = new List<string>();
 
+        public Dictionary<TokenType, PrefixParseFn> PrefixParseFns { get; set; }
+        public Dictionary<TokenType, InfixParseFn> InfixParseFns { get; set; }
+
         public Parser(Lexer lexer)
         {
             this.Lexer = lexer;
 
             this.CurrentToken = this.Lexer.NextToken();
             this.NextToken = this.Lexer.NextToken();
+
+            RegisterPrefixParseFns();
         }
 
         private void ReadToken()
@@ -56,7 +64,7 @@ namespace Monkey.Parsing
                 case TokenType.RETURN:
                     return this.ParseReturnStatement();
                 default:
-                    return null;
+                    return ParseExpressionStatement();
             }
         }
 
@@ -93,6 +101,48 @@ namespace Monkey.Parsing
             return statement;
         }
 
+        public IExpression ParseExpression(Precedence precedence)
+        {
+            this.PrefixParseFns.TryGetValue(this.CurrentToken.Type, out var prefix);
+            if (prefix == null) return null;
+
+            var leftExpression = prefix();
+            return leftExpression;
+        }
+
+        public ExpressionStatement ParseExpressionStatement()
+        {
+            var statement = new ExpressionStatement();
+            statement.Token = this.CurrentToken;
+
+            statement.Expression = this.ParseExpression(Precedence.LOWEST);
+
+            if (this.NextToken.Type == TokenType.SEMICOLON) this.ReadToken();
+
+            return statement;
+        }
+
+        public IExpression ParseIdentifier()
+        {
+            return new Identifier(this.CurrentToken, this.CurrentToken.Literal);
+        }
+
+        public IExpression ParseIntegerLiteral()
+        {
+            if (int.TryParse(this.CurrentToken.Literal, out int result))
+            {
+                return new IntegerLiteral()
+                {
+                    Token = this.CurrentToken,
+                    Value = result,
+                };
+            }
+
+            var message = $"{this.CurrentToken.Literal} を integer に変換できません。";
+            this.Errors.Add(message);
+            return null;
+        }
+
         private bool ExpectPeek(TokenType type)
         {
             if (this.NextToken.Type == type)
@@ -110,5 +160,23 @@ namespace Monkey.Parsing
         {
             this.Errors.Add($"{actual.ToString()} ではなく {expected.ToString()} が来なければなりません。");
         }
+
+        private void RegisterPrefixParseFns()
+        {
+            this.PrefixParseFns = new Dictionary<TokenType, PrefixParseFn>();
+            this.PrefixParseFns.Add(TokenType.IDENT, this.ParseIdentifier);
+            this.PrefixParseFns.Add(TokenType.INT, this.ParseIntegerLiteral);
+        }
+    }
+
+    public enum Precedence
+    {
+        LOWEST = 1,
+        EQUALS,
+        LESSGREATER,
+        SUM,
+        PRODUCT,
+        PREFIX,
+        CALL,
     }
 }
