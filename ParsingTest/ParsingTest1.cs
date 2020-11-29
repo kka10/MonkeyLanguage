@@ -126,11 +126,48 @@ namespace Monkey.ParsingTest
             Assert.Equal(integerLiteral.TokenLiteral(), "123");
         }
 
+        [Fact]
+        public void TestPrefixExpressions1()
+        {
+            var tests = new[] {
+                ("!5", "!", 5),
+                ("-15", "-", 15),
+            };
+
+            foreach (var (input, op, value) in tests)
+            {
+                var lexer = new Lexer(input);
+                var parser = new Parser(lexer);
+                var root = parser.ParseProgram();
+                this._CheckParserErrors(parser);
+
+                Assert.Equal(root.Statements.Count, 1);
+
+                var statement = root.Statements[0] as ExpressionStatement;
+                Assert.NotNull(statement);
+                
+                var expression = statement.Expression as PrefixExpression;
+                Assert.NotNull(expression);
+                Assert.Equal(expression.Operator, op);
+                
+                this._TestIntegerLiteral(expression.Right, value);
+            }
+        }
+
         private void _CheckParserErrors(Parser parser)
         {
             if (parser.Errors.Count == 0) return;
             var message = "\n" + string.Join("\n", parser.Errors);
             output.WriteLine(message);
+        }
+
+        private void _TestIntegerLiteral(IExpression expression, int value)
+        {
+            var integerLiteral = expression as IntegerLiteral;
+
+            Assert.NotNull(integerLiteral);
+            Assert.Equal(integerLiteral.Value, value);
+            Assert.Equal(integerLiteral.TokenLiteral(), $"{value}");
         }
     }
 }
